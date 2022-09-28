@@ -1,0 +1,392 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --darkBlack: rgb(2, 4, 8);
+  --darkGray: rgb(22, 27, 34);
+  --missBlue: rgb(76, 84, 191);
+}
+
+/*credit to https://google-webfonts-helper.herokuapp.com/ for allowing me to import these fonts automatically*/
+/* azeret-mono-regular - latin */
+@font-face {
+  font-family: 'Azeret Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/azeret-mono-v11-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('../fonts/azeret-mono-v11-latin-regular.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('../fonts/azeret-mono-v11-latin-regular.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('../fonts/azeret-mono-v11-latin-regular.woff') format('woff'),
+    /* Modern Browsers */ url('../fonts/azeret-mono-v11-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('../fonts/azeret-mono-v11-latin-regular.svg#AzeretMono') format('svg'); /* Legacy iOS */
+}
+/* azeret-mono-700 - latin */
+@font-face {
+  font-family: 'Azeret Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/azeret-mono-v11-latin-700.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('../fonts/azeret-mono-v11-latin-700.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('../fonts/azeret-mono-v11-latin-700.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */ url('../fonts/azeret-mono-v11-latin-700.woff')
+      format('woff'),
+    /* Modern Browsers */ url('../fonts/azeret-mono-v11-latin-700.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('../fonts/azeret-mono-v11-latin-700.svg#AzeretMono') format('svg'); /* Legacy iOS */
+}
+
+/* roboto-300 - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/roboto-v30-latin-300.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('../fonts/roboto-v30-latin-300.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('../fonts/roboto-v30-latin-300.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('../fonts/roboto-v30-latin-300.woff')
+      format('woff'),
+    /* Modern Browsers */ url('../fonts/roboto-v30-latin-300.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */ url('../fonts/roboto-v30-latin-300.svg#Roboto')
+      format('svg'); /* Legacy iOS */
+}
+/* roboto-regular - latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/roboto-v30-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('../fonts/roboto-v30-latin-regular.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('../fonts/roboto-v30-latin-regular.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('../fonts/roboto-v30-latin-regular.woff')
+      format('woff'),
+    /* Modern Browsers */ url('../fonts/roboto-v30-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('../fonts/roboto-v30-latin-regular.svg#Roboto') format('svg'); /* Legacy iOS */
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+.content {
+  min-height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.shipGrid {
+  position: relative;
+}
+
+.block {
+  background: white;
+  width: 42px;
+  height: 42px;
+  border: none;
+  position: absolute;
+}
+
+.hitBlock {
+  background: pink;
+}
+
+.cursotBlock {
+  background: green;
+}
+
+.missBlock {
+  background: var(--missBlue);
+}
+
+.sectionScreen {
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+
+  position: fixed;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.shipTitle {
+  font-family: 'Azeret Mono', monospace;
+}
+
+.shipText {
+  margin: 10px;
+}
+
+.shipSelection {
+  padding: 10px;
+  color: white;
+  background: var(--darkBlack);
+  display: flex;
+  width: 440px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rotateImage {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(87deg)
+    brightness(100%);
+}
+
+.rotateButton:hover {
+  background: var(--darkBlack);
+  cursor: pointer;
+}
+
+.rotateButton {
+  background: var(--darkGray);
+  border: 1px solid white;
+  margin: 10px;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+
+.shipGrid {
+  width: 420px;
+  height: 420px;
+  background: var(--darkGray);
+  border: 1px solid;
+  padding: 0;
+  margin: 0;
+}
+
+.overlay {
+  background: rgba(39, 39, 39, 0.574);
+  z-index: 1;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  background: rgb(2, 4, 8);
+}
+
+.mainSection {
+  min-height: 90vh;
+  color: white;
+  position: relative;
+}
+
+.mainTitle {
+  text-align: center;
+  height: 10vh;
+  line-height: 10vh;
+  background: var(--darkGray);
+}
+
+.centerSection {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.grid {
+  width: 420px;
+  height: 420px;
+  position: relative;
+  background: var(--darkGray);
+  border: 1px solid white;
+}
+.shipOverlay {
+  width: 420px;
+  height: 420px;
+
+  border: 1px solid blue;
+
+  position: fixed;
+  z-index: 3;
+}
+
+.stats {
+  display: flex;
+  width: 420px;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.footer {
+  background: var(--darkGray);
+  height: 10vh;
+  color: white;
+  word-wrap: break-word;
+  font-size: small;
+  line-height: 10vh;
+  text-align: center;
+}
+
+.mainTitle h1 {
+  font-family: 'Azeret Mono', monospace;
+}
+
+@media only screen and (max-width: 600px) {
+  .footer {
+    font-size: small;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  .grid {
+    width: 300px;
+    height: 300px;
+  }
+
+  .shipGrid {
+    width: 300px;
+    height: 300px;
+  }
+
+  .shipOverlay {
+    width: 300px;
+    height: 300px;
+  }
+
+  .shipSelection {
+    width: 310px;
+  }
+
+  .footer {
+    font-size: x-small;
+  }
+
+  .block {
+    width: 30px;
+    height: 30px;
+  }
+
+  .stats {
+    width: 300px;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .grid {
+    width: 210px;
+    height: 210px;
+  }
+
+  .shipGrid {
+    width: 210px;
+    height: 210px;
+  }
+
+  .shipOverlay {
+    width: 210px;
+    height: 210px;
+  }
+
+  .shipSelection {
+    width: 220px;
+  }
+
+  .shipText {
+    font-size: medium;
+  }
+
+  .boardTitle {
+    font-size: medium;
+  }
+
+  .block {
+    width: 21px;
+    height: 21px;
+  }
+  .footer {
+    font-size: x-small;
+  }
+
+  .stats {
+    width: 210px;
+  }
+}
+
+@media only screen and (max-width: 365px) {
+  .footer {
+    font-size: xx-small;
+  }
+  .footer {
+    font-size: 8px;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .grid {
+    width: 150px;
+    height: 150px;
+  }
+
+  .footer {
+    font-size: 6px;
+  }
+
+  .shipOverlay {
+    width: 150px;
+    height: 150px;
+  }
+
+  .shipGrid {
+    width: 150px;
+    height: 150px;
+  }
+
+  .shipSelection {
+    width: 160px;
+  }
+
+  .block {
+    width: 15px;
+    height: 15px;
+  }
+
+  .shipText {
+    font-size: small;
+  }
+
+  .shipTitle {
+    font-size: medium;
+  }
+
+  .stats {
+    width: 150px;
+    font-size: 12px;
+  }
+}
