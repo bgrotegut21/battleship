@@ -47,35 +47,20 @@ const Gameboard = () => {
 
     let shiplength = 5 - currentArray.length;
 
-    if (currentArray.length > 3) shiplength = 2;
-
-    if (currentArray.length === 5) {
-      return {
-        shipsArray: currentArray,
-        message: 'You have already placed all of your ships',
-      };
-    }
+    if (shiplength === 2) shiplength = 3;
+    if (shiplength === 1) shiplength = 2;
 
     const currentShip = ship.createShip(latestPosition, shiplength, axis);
-    if (!currentShip) {
-      return {
-        shipArray: currentArray,
-        message: 'You cannot place a ship there',
-      };
-    }
 
     const isCollided = compareShipsArray(currentArray, currentShip);
 
-    if (!isCollided) {
+    if (!isCollided && !currentArray.length === 5 && !currentShip) {
       currentArray.push(currentShip);
       currentShips = currentArray;
       return currentArray;
     }
 
-    return {
-      shipArray: currentArray,
-      message: "You've already placed a ship there",
-    };
+    return currentArray;
   };
 
   const placeRandomShips = (length, shipsArray, randomizer, randomAxies) => {

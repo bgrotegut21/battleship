@@ -235,112 +235,53 @@ describe('gameboard', () => {
     expect(randomShipPlacement).toEqual(randomItem.randomShipsArray);
   });
 
+  // WORK ON THIS
   it('playerPlaceShip', () => {
     const playerBoard = Gameboard();
-    const playerBoard2 = Gameboard();
 
-    const playerShip1Position = position.createPosition(1, 1);
-    const playerShip2Position = position.createPosition(3, 2);
-    const playerShip3Position = position.createPosition(3, 4);
-    const playerShip4Position = position.createPosition(9, 2);
-    const playerShip5Position = position.createPosition(9, 6);
-    const playerShipPosition6 = position.createPosition(9, 9);
-    const playerShipPosition7 = position.createPosition(29, 15);
+    const assertPlayerPlaceShip = (location, axis, result) => {
+      const recieved = playerBoard.playerPlaceShip(location, axis);
+      expect(recieved).toEqual(result);
+    };
 
-    const playerShip1 = ship.createShip(playerShip1Position, 5, 'y');
-    const playerShip2 = ship.createShip(playerShip2Position, 4, 'x');
-    const playerShip3 = ship.createShip(playerShip3Position, 3, 'x');
-    const playerShip4 = ship.createShip(playerShip4Position, 2, 'y');
-    const playerShip5 = ship.createShip(playerShip5Position, 2, 'y');
-
-    const playerShipsFinalArray = [
-      playerShip1,
-      playerShip2,
-      playerShip3,
-      playerShip4,
-      playerShip5,
-    ];
-
-    const playerShipsFinalArray2 = [
-      playerShip1,
-      playerShip2,
-      playerShip3,
-      playerShip4,
-    ];
-
-    const shipPlacement1 = playerBoard.playerPlaceShip(
-      playerShip1Position,
-      'y'
-    );
-    const shipPlacement2 = playerBoard.playerPlaceShip(
-      playerShip2Position,
-      'x'
-    );
-    const shipPlacement3 = playerBoard.playerPlaceShip(
-      playerShip3Position,
-      'x'
-    );
-    const shipPlacement4 = playerBoard.playerPlaceShip(
-      playerShip4Position,
-      'y'
-    );
-    const shipPlacement5 = playerBoard.playerPlaceShip(
-      playerShip5Position,
-      'y'
-    );
-
-    const shipPlacement6 = playerBoard.playerPlaceShip(
-      playerShipPosition6,
-      'y'
-    );
-
-    playerBoard2.playerPlaceShip(playerShip1Position, 'y');
-    playerBoard2.playerPlaceShip(playerShip2Position, 'x');
-    playerBoard2.playerPlaceShip(playerShip3Position, 'x');
-    playerBoard2.playerPlaceShip(playerShip4Position, 'y');
-    const shipCollided = playerBoard2.playerPlaceShip(playerShip1Position, 'y');
-    const shipOutOfBoard = playerBoard2.playerPlaceShip(
-      playerShipPosition7,
-      'y'
-    );
-
-    const playerBoardValues = playerBoard.getValues();
-    const playerBoardValues2 = playerBoard2.getValues();
-
-    expect(shipCollided).toEqual({
-      shipArray: playerShipsFinalArray2,
-      message: "You've already placed a ship there",
-    });
-
-    expect(shipOutOfBoard).toEqual({
-      shipArray: playerShipsFinalArray2,
-      message: 'You cannot place a ship there',
-    });
-
-    expect(shipPlacement1).toEqual([playerShip1]);
-    expect(shipPlacement2).toEqual([playerShip1, playerShip2]);
-    expect(shipPlacement3).toEqual([playerShip1, playerShip2, playerShip3]);
-    expect(shipPlacement4).toEqual([
-      playerShip1,
-      playerShip2,
-      playerShip3,
-      playerShip4,
-    ]);
-    expect(shipPlacement5).toEqual([
-      playerShip1,
-      playerShip2,
-      playerShip3,
-      playerShip4,
-      playerShip5,
+    assertPlayerPlaceShip(position.createPosition(1, 1), 'y', [
+      position.createPosition(1, 1),
     ]);
 
-    expect(shipPlacement6).toEqual({
-      shipsArray: playerShipsFinalArray,
-      message: 'You have already placed all of your ships',
-    });
+    assertPlayerPlaceShip(position.createPosition(9, 9), 'x', [
+      position.createPosition(1, 1),
+    ]);
 
-    expect(playerBoardValues.currentShips).toEqual(playerShipsFinalArray);
-    expect(playerBoardValues2.currentShips).toEqual(playerShipsFinalArray2);
+    assertPlayerPlaceShip(position.createPosition(4, 4), 'x', [
+      position.createPosition(1, 1),
+      position.createPosition(4, 4),
+    ]);
+
+    assertPlayerPlaceShip(position.createPosition(4, 4), 'y', [
+      position.createPosition(1, 1),
+      position.createPosition(4, 4),
+    ]);
+
+    assertPlayerPlaceShip(position.createPosition(4, 1), 'x', [
+      position.createPosition(1, 1),
+      position.createPosition(4, 4),
+      position.createPosition(4, 1),
+    ]);
+
+    assertPlayerPlaceShip(position.addPosition.createPosition(6, 9), 'y', [
+      position.createPosition(1, 1),
+      position.createPosition(4, 4),
+      position.createPosition(4, 1),
+      position.createPosition(9, 6),
+    ]);
+
+    assertPlyerShip(position.addPosition.createPosition(), 'x', [
+      position.createPosition(1, 1),
+      position.createPosition(4, 4),
+      position.createPosition(4, 1),
+      position.createPosition(9, 6),
+      p,
+    ]);
   });
 
   // getting type of ship should only be used when the game is placing the ships

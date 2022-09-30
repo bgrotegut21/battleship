@@ -8,14 +8,16 @@ const Ui = () => {
   const position = Position();
   const ship = Ship();
 
-  const renderSpeed = 10;
+  const renderSpeed = 1;
 
-  let blockSize = 42;
+  const blockSize = 42;
 
   let placedShip = false;
   let axis = 'y';
 
   let mouseBlockLocation = false;
+
+  const createDomElement = (elementName) => document.createElement(elementName);
 
   const getMousePosition = (offsetX, offsetY) => {
     // console.log(offsetX, offsetY, 'offset x and offset y');
@@ -52,10 +54,11 @@ const Ui = () => {
 
   // block size matches the size gridsize of the media query divided by 10
   const changeBlockSize = (matchMedia) => {
-    blockSize = 42;
+    let blockSize = 42;
     if (matchMedia('(max-width: 960px)').matches) blockSize = 30;
     if (matchMedia('(max-width: 470px)').matches) blockSize = 21;
     if (matchMedia('(max-width: 320px)').matches) blockSize = 15;
+    return blockSize;
 
     // console.log(matchMedia('(max-width: 320px)'), 'the current match media');
   };
@@ -94,10 +97,8 @@ const Ui = () => {
   //   element.shipGrid.appendChild(currentSnakeBlock);
   // };
 
-  const createDomElement = (elementName) => document.createElement(elementName);
-
-  const createShipBlock = (shipPosition, latestBlockSize) => {
-    const shipBlock = createBlockElement(false, createDomElement);
+  const createShipBlock = (shipPosition, latestBlockSize, shipType) => {
+    const shipBlock = createBlockElement(shipType, createDomElement);
 
     const realPositionX = Math.floor(shipPosition.xCoord * latestBlockSize);
     const realPositionY = Math.floor(shipPosition.yCoord * latestBlockSize);
@@ -186,11 +187,49 @@ const Ui = () => {
     placePlayerShip(placedShip, axis, activeGame);
   };
 
-  const renderGame = () => {
-    setTimeout(() => {}, renderSpeed);
+  const addShips = (ships, shipType, grid, latestBlockSize) => {
+    ships.forEach((shipGroup) => {
+      shipGroup.forEach((boat) => {
+        const shipElement = createShipBlock(boat, latestBlockSize, shipType);
+        grid.appendChild(shipElement);
+      });
+    });
   };
 
-  const removeShipSelction = () => {
+  const renderGrids = (blockSize2) => {
+    const gameValues = activeGame.getGameValues();
+
+    const { playerGrid } = dom.getElements();
+    const { computerGrid } = dom.getElements();
+
+    playerGrid.innerHTML = '';
+    computerGrid.innerHTML = '';
+
+    const playerBoardValues = gameValues.playerBoard.getValues();
+    const computerBoardValues = gameValues.computerBoard.getValues();
+
+    // console.log(playerBoardValues, 'playerBoardValues');
+    // console.log(computerBoardValues, 'computerBoardValues');
+
+    addShips(playerBoardValues.currentShips, false, playerGrid, blockSize2);
+    addShips(playerBoardValues.hits, 'hitBlock', playerGrid, blockSize2);
+    addShips(playerBoardValues.misses, 'missBlock', playerGrid, blockSize);
+
+    addShips(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
+    addShips(computerBoardValues.misses, 'missBlock', computerGrid, blockSize2);
+  };
+
+  const renderGame = (latestBlockSize) => {
+    setTimeout(() => {
+      const gameStatus = activeGame.gameIsOver();
+
+      renderGrids(latestBlockSize);
+
+      if (!gameStatus.gameFinished) renderGame(latestBlockSize);
+    }, renderSpeed);
+  };
+
+  const removeShipSection = () => {
     const elements = dom.getElements();
 
     elements.overlay.style.display = 'none';
@@ -198,8 +237,10 @@ const Ui = () => {
     elements.shipGrid.innerHTML = '';
   };
 
-  const startGame = (gameRender) => {
-    removeShipsSelction();
+  const startGame = (latestBlockSize) => {
+    removeShipSection();
+    activeGame.setupGame();
+    renderGame(latestBlockSize);
   };
 
   const renderSelectionGrid = () => {
@@ -230,6 +271,7 @@ const Ui = () => {
       }
 
       if (!activeGame.checkSetup(checkBoardShips)) renderSelectionGrid();
+      else startGame(blockSize);
     }, renderSpeed);
   };
 
