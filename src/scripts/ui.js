@@ -10,7 +10,7 @@ const Ui = () => {
 
   const renderSpeed = 1;
 
-  const blockSize = 42;
+  let blockSize = 42;
 
   let placedShip = false;
   let axis = 'y';
@@ -54,7 +54,7 @@ const Ui = () => {
 
   // block size matches the size gridsize of the media query divided by 10
   const changeBlockSize = (matchMedia) => {
-    let blockSize = 42;
+    blockSize = 42;
     if (matchMedia('(max-width: 960px)').matches) blockSize = 30;
     if (matchMedia('(max-width: 470px)').matches) blockSize = 21;
     if (matchMedia('(max-width: 320px)').matches) blockSize = 15;
@@ -66,7 +66,11 @@ const Ui = () => {
   const createBlockElement = (blockClass, createBlock) => {
     let latestClass = blockClass;
 
-    if (latestClass !== 'hitBlock' && latestClass !== 'missBlock') {
+    if (
+      latestClass !== 'hitBlock' &&
+      latestClass !== 'missBlock' &&
+      latestClass !== 'cursorBlock'
+    ) {
       latestClass = '';
     }
 
@@ -187,7 +191,51 @@ const Ui = () => {
     placePlayerShip(placedShip, axis, activeGame);
   };
 
-  const addShips = (ships, shipType, grid, latestBlockSize) => {
+  const addUiEvents = () => {
+    const element = dom.getElements();
+    element.shipLayer.addEventListener('mousemove', findMousePosition);
+    element.shipLayer.addEventListener('touchmove', findTouchPosition);
+    element.shipLayer.addEventListener('click', placePlayerShipEvent);
+
+    element.rotateButton.addEventListener('click', changeAxis);
+  };
+
+  const removeUiEvents = () => {
+    const element = dom.getElements();
+
+    element.shipLayer.removeEventListener('mousemove', findMousePosition);
+    element.shipLayer.removeEventListener('touchmove', findTouchPosition);
+    element.shipLayer.removeEventListener('click', placePlayerShipEvent);
+
+    element.rotateButton.removeEventListener('click', changeAxis);
+  };
+
+  const checkMouseTarget = (elementClass) => {
+    console.log(elementClass, 'the element calss');
+    if (elementClass !== 'gridOverlay computerGridOverlay') return false;
+    return true;
+  };
+
+  const changeMousePosition = (event) => {
+    const mouseTarget = checkMouseTarget(event.target.className);
+    if (!mouseTarget) mouseBlockLocation = mouseTarget;
+  };
+
+  const addGameEvents = () => {
+    removeUiEvents();
+    const element = dom.getElements();
+    window.addEventListener('mousemove', changeMousePosition);
+    element.computerGridLayer.addEventListener('mousemove', findMousePosition);
+    element.computerGridLayer.addEventListener('touchmove', findTouchPosition);
+  };
+
+  const addShips = (
+    ships,
+    shipType,
+    grid,
+    latestBlockSize,
+    isMousePosition
+  ) => {
     ships.forEach((shipGroup) => {
       shipGroup.forEach((boat) => {
         const shipElement = createShipBlock(boat, latestBlockSize, shipType);
@@ -196,7 +244,7 @@ const Ui = () => {
     });
   };
 
-  const renderGrids = (blockSize2) => {
+  const renderGrids = (blockSize2, mousePosition) => {
     const gameValues = activeGame.getGameValues();
 
     const { playerGrid } = dom.getElements();
@@ -217,13 +265,19 @@ const Ui = () => {
 
     addShips(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
     addShips(computerBoardValues.misses, 'missBlock', computerGrid, blockSize2);
+
+    const mouseShip = ship.createShip(mousePosition, 1, 'x');
+
+    if (!mouseShip) computerGrid.innerHTML = '';
+    else addShips([mouseShip], 'cursorBlock', computerGrid, blockSize2);
   };
 
-  const renderGame = (latestBlockSize) => {
+  const renderGame = () => {
     setTimeout(() => {
       const gameStatus = activeGame.gameIsOver();
 
-      renderGrids(latestBlockSize);
+      const latestBlockSize = changeBlockSize(window.matchMedia);
+      renderGrids(latestBlockSize, mouseBlockLocation);
 
       if (!gameStatus.gameFinished) renderGame(latestBlockSize);
     }, renderSpeed);
@@ -237,10 +291,13 @@ const Ui = () => {
     elements.shipGrid.innerHTML = '';
   };
 
-  const startGame = (latestBlockSize) => {
+  const startGame = () => {
     removeShipSection();
+
     activeGame.setupGame();
-    renderGame(latestBlockSize);
+    addGameEvents();
+
+    renderGame();
   };
 
   const renderSelectionGrid = () => {
@@ -275,14 +332,6 @@ const Ui = () => {
     }, renderSpeed);
   };
 
-  const activateUi = () => {
-    const pageContent = dom.getPage();
-    document.body.innerHTML = pageContent;
-
-    addUiEvents();
-    renderSelectionGrid();
-  };
-
   const getValues = () => ({
     blockSize,
     placedShip,
@@ -290,23 +339,12 @@ const Ui = () => {
     mouseBlockLocation,
   });
 
-  const addUiEvents = () => {
-    const element = dom.getElements();
-    element.shipLayer.addEventListener('mousemove', findMousePosition);
-    element.shipLayer.addEventListener('touchmove', findTouchPosition);
-    element.shipLayer.addEventListener('click', placePlayerShipEvent);
+  const activateUi = () => {
+    const pageContent = dom.getPage();
+    document.body.innerHTML = pageContent;
 
-    element.rotateButton.addEventListener('click', changeAxis);
-  };
-
-  const removeUiEvents = () => {
-    const element = dom.getElements();
-
-    element.shipLayer.removeEventListener('mousemove', findMousePosition);
-    element.shipLayer.removeEventListener('touchmove', findTouchPosition);
-    element.shipLayer.removeEventListener('click', placePlayerShipEvent);
-
-    element.rotateButton.removeEventListener('click', changeAxis);
+    addUiEvents();
+    renderSelectionGrid();
   };
 
   return {

@@ -45,7 +45,8 @@ const Game = () => {
     playerCheckBoard.playerPlaceShip(location, axis);
 
   const gameIsOver = () => {
-    // console.log(playerBoardValues.currentShips, 'the current ships');
+    const playerCheckShips = playerCheckBoard.getValues().currentShips;
+    if (!checkSetup(playerCheckShips)) return false;
 
     if (computerBoard.isAllSunk()) {
       return { message: 'You Won', gameFinished: true };

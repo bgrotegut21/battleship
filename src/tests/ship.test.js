@@ -34,6 +34,7 @@ describe('Ship', () => {
       position.createPosition(2, 1),
     ]);
 
+    assertCreateShip(position.createPosition(1, 1), 0, 'x', false);
     assertCreateShip(position.createPosition(10, 10), 2, 'y', false);
     assertCreateShip(position.createPosition(1, 1), 7, 'x', false);
     assertCreateShip(position.createPosition(9, 9), 2, 'x', false);

@@ -63,7 +63,11 @@ describe('ui', () => {
 
       blockElement.classList.add('block');
 
-      if (blockClass === 'hitBlock' || blockClass === 'missBlock') {
+      if (
+        blockClass === 'hitBlock' ||
+        blockClass === 'missBlock' ||
+        blockClass === 'cursorBlock'
+      ) {
         blockElement.classList.add(blockClass);
       }
 
@@ -80,6 +84,7 @@ describe('ui', () => {
     assertBlockElement('fsas');
     assertBlockElement('hitBlock');
     assertBlockElement('missBlock');
+    assertBlockElement('cursorBlock');
   });
 
   it('moveShipByDirection', () => {

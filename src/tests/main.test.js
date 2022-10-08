@@ -10,28 +10,16 @@ describe('main', () => {
   const practial = Practical();
   const ship = Ship();
 
-  const testSetupGame = (currentBoatPosition, boatAxies, currentGameClass) => {
-    let index = 0;
-
-    while (index < currentBoatPosition.length) {
-      const boatPosition = currentBoatPosition[index];
-      const boatAxis = boatAxies[index];
-
-      currentGameClass.setupShip(boatPosition, boatAxis);
-
-      index += 1;
-    }
-  };
-
   const boatPositions = [
     position.createPosition(1, 1),
     position.createPosition(4, 4),
     position.createPosition(4, 1),
-    position.createPosition(6, 7),
     position.createPosition(9, 6),
+
+    position.createPosition(5, 7),
   ];
 
-  const boatAxies = ['y', 'x', 'x', 'x', 'y'];
+  const boatAxies = ['y', 'x', 'x', 'y', 'x'];
 
   it('checkSetup', () => {
     const game = Game();
@@ -48,8 +36,8 @@ describe('main', () => {
     boatPositions2[3] = position.createPosition(7, 6);
     boatPositions2[4] = position.createPosition(6, 9);
 
-    testSetupGame(boatPositions, boatAxies, game);
-    testSetupGame(boatPositions2, boatAxies, game2);
+    setupShips(boatPositions, boatAxies, game);
+    setupShips(boatPositions2, boatAxies, game2);
 
     expect(game.setupGame()).toEqual(true);
     expect(game2.setupGame()).toEqual(false);
@@ -75,18 +63,31 @@ describe('main', () => {
     assertArrangeBlocks(game2, position.createPosition(9, 9), 5, 'y');
   });
 
+  const setupShips = (currentBoatPosition, axies, currentGameClass) => {
+    let index = 0;
+
+    while (index < currentBoatPosition.length) {
+      const boatPosition = currentBoatPosition[index];
+      const boatAxis = axies[index];
+
+      currentGameClass.setupShip(boatPosition, boatAxis);
+
+      index += 1;
+    }
+  };
+
   it('gameIsOver', () => {
     const game = Game();
     const game2 = Game();
     const game3 = Game();
 
-    testSetupGame(boatPositions, boatAxies, game);
+    setupShips(boatPositions, boatAxies, game);
     game.setupGame();
 
-    testSetupGame(boatPositions, boatAxies, game2);
+    setupShips(boatPositions, boatAxies, game2);
     game2.setupGame();
 
-    testSetupGame(boatPositions, boatAxies, game3);
+    setupShips(boatPositions, boatAxies, game3);
     game3.setupGame();
 
     const game2Values = game2.getGameValues();

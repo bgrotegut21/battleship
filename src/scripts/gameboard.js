@@ -25,6 +25,8 @@ const Gameboard = () => {
 
   const compareShipsArray = (latestShipsArray, ships) => {
     let shipsDoCollide = false;
+    if (!ships) return shipsDoCollide;
+
     // console.log(latestShipsArray, 'the curreent ships array');
     // console.log(ships, 'the current ships');
 
@@ -42,7 +44,6 @@ const Gameboard = () => {
   };
 
   const playerPlaceShip = (location, axis) => {
-    const latestPosition = location;
     const currentArray = practical.copyArray(currentShips);
 
     let shiplength = 5 - currentArray.length;
@@ -50,16 +51,16 @@ const Gameboard = () => {
     if (shiplength === 2) shiplength = 3;
     if (shiplength === 1) shiplength = 2;
 
-    const currentShip = ship.createShip(latestPosition, shiplength, axis);
+    const currentShip = ship.createShip(location, shiplength, axis);
 
     const isCollided = compareShipsArray(currentArray, currentShip);
 
-    if (!isCollided && !currentArray.length === 5 && !currentShip) {
-      currentArray.push(currentShip);
-      currentShips = currentArray;
+    if (currentArray.length === 5 || !currentShip || isCollided) {
       return currentArray;
     }
 
+    currentArray.push(currentShip);
+    currentShips = currentArray;
     return currentArray;
   };
 

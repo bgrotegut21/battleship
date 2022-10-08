@@ -18,6 +18,7 @@ const Dom = () => {
     computerHits: document.querySelector('.computerHits'),
     computerMisses: document.querySelector('.computerMisses'),
     content: document.querySelector('.content'),
+    computerGridLayer: document.querySelector('.computerGridLayer'),
   });
 
   const getPage = () => {
@@ -46,7 +47,10 @@ const Dom = () => {
                               <div class="centerSection">
                                 <div class="playerBoard board">
                                   <h2 class="boardTitle">Player Board</h2>
-                                  <div class="playerGrid grid"></div>
+                                  <div class="gridLayer playerGridLayer">
+                                    <div class="gridOverlay"></div>
+                                    <div class="playerGrid grid"></div>
+                                  </div>
                                   <div class="playerStats stats">
                                     <h2 class="playerHits hits">Hits 0</h2>
                                     <h2 class="playerMisses misses">Misses 0</h2>
@@ -55,8 +59,10 @@ const Dom = () => {
 
                                 <div class="computerBoard board">
                                   <h2 class="boardTitle">Computer Board</h2>
-
-                                  <div class="computerGrid grid"></div>
+                                  <div class="gridLayer computerGridLayer">
+                                    <div class="gridOverlay computerGridOverlay"></div>
+                                    <div class="computerGrid grid"></div>
+                                  </div>
                                   <div class="computerStats stats">
                                     <h2 class="computerHits hits">Hits 0</h2>
 

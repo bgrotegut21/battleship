@@ -110,8 +110,8 @@ body {
   background: pink;
 }
 
-.cursotBlock {
-  background: green;
+.cursorBlock {
+  background: blue;
 }
 
 .missBlock {
@@ -178,12 +178,17 @@ body {
   margin: 0;
 }
 
+.boardTitle {
+  margin: 10px;
+}
+
 .overlay {
   background: rgba(39, 39, 39, 0.574);
-  z-index: 1;
+  z-index: 2;
   position: fixed;
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .content {
@@ -230,11 +235,32 @@ body {
 .shipOverlay {
   width: 420px;
   height: 420px;
-
   border: 1px solid blue;
 
   position: fixed;
+}
+
+.gridLayer {
+  width: 420px;
+  height: 420px;
+  position: relative;
+}
+
+.gridOverlay {
+  width: 420px;
+  height: 420px;
+  border: 1px solid blue;
+}
+
+.shipOverlay {
+  position: fixed;
   z-index: 3;
+}
+
+.gridOverlay {
+  position: absolute;
+
+  z-index: 1;
 }
 
 .stats {
@@ -275,7 +301,9 @@ body {
     height: 300px;
   }
 
-  .shipOverlay {
+  .shipOverlay,
+  .gridOverlay,
+  .gridLayer {
     width: 300px;
     height: 300px;
   }
@@ -309,7 +337,9 @@ body {
     height: 210px;
   }
 
-  .shipOverlay {
+  .shipOverlay,
+  .gridOverlay,
+  .gridLayer {
     width: 210px;
     height: 210px;
   }
@@ -358,7 +388,9 @@ body {
     font-size: 6px;
   }
 
-  .shipOverlay {
+  .shipOverlay,
+  .gridOverlay,
+  .gridLayer {
     width: 150px;
     height: 150px;
   }

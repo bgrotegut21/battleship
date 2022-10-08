@@ -241,46 +241,55 @@ describe('gameboard', () => {
 
     const assertPlayerPlaceShip = (location, axis, result) => {
       const recieved = playerBoard.playerPlaceShip(location, axis);
+
       expect(recieved).toEqual(result);
     };
 
     assertPlayerPlaceShip(position.createPosition(1, 1), 'y', [
-      position.createPosition(1, 1),
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
     ]);
 
     assertPlayerPlaceShip(position.createPosition(9, 9), 'x', [
-      position.createPosition(1, 1),
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
     ]);
 
     assertPlayerPlaceShip(position.createPosition(4, 4), 'x', [
-      position.createPosition(1, 1),
-      position.createPosition(4, 4),
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
     ]);
 
     assertPlayerPlaceShip(position.createPosition(4, 4), 'y', [
-      position.createPosition(1, 1),
-      position.createPosition(4, 4),
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
     ]);
 
     assertPlayerPlaceShip(position.createPosition(4, 1), 'x', [
-      position.createPosition(1, 1),
-      position.createPosition(4, 4),
-      position.createPosition(4, 1),
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
+      ship.createShip(position.createPosition(4, 1), 3, 'x'),
     ]);
 
-    assertPlayerPlaceShip(position.addPosition.createPosition(6, 9), 'y', [
-      position.createPosition(1, 1),
-      position.createPosition(4, 4),
-      position.createPosition(4, 1),
-      position.createPosition(9, 6),
+    assertPlayerPlaceShip(position.createPosition(9, 6), 'y', [
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
+      ship.createShip(position.createPosition(4, 1), 3, 'x'),
+      ship.createShip(position.createPosition(9, 6), 3, 'y'),
     ]);
 
-    assertPlyerShip(position.addPosition.createPosition(), 'x', [
-      position.createPosition(1, 1),
-      position.createPosition(4, 4),
-      position.createPosition(4, 1),
-      position.createPosition(9, 6),
-      p,
+    assertPlayerPlaceShip(position.createPosition(5, 7), 'x', [
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
+      ship.createShip(position.createPosition(4, 1), 3, 'x'),
+      ship.createShip(position.createPosition(9, 6), 3, 'y'),
+      ship.createShip(position.createPosition(5, 7), 2, 'x'),
+    ]);
+
+    assertPlayerPlaceShip(position.createPosition(1, 9), 'x', [
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+      ship.createShip(position.createPosition(4, 4), 4, 'x'),
+      ship.createShip(position.createPosition(4, 1), 3, 'x'),
+      ship.createShip(position.createPosition(9, 6), 3, 'y'),
+      ship.createShip(position.createPosition(5, 7), 2, 'x'),
     ]);
   });
 
