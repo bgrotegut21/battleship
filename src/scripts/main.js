@@ -35,7 +35,8 @@ const Game = () => {
 
     if (!checkSetup(playerCheckValues.currentShips)) return false;
 
-    computerBoard.recieveAttack(coords);
+    const currentAttack = computerBoard.recieveAttack(coords);
+    if (!currentAttack) return false;
     playerBoard.recieveRandomAttack(randomizer);
 
     return true;

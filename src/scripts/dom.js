@@ -14,9 +14,11 @@ const Dom = () => {
     playerGrid: document.querySelector('.playerGrid'),
     playerHits: document.querySelector('.playerHits'),
     playerMisses: document.querySelector('.playerMisses'),
+    playerStats: document.querySelector('.playerStats'),
     computerGrid: document.querySelector('.computerGrid'),
     computerHits: document.querySelector('.computerHits'),
     computerMisses: document.querySelector('.computerMisses'),
+    computerStats: document.querySelector('.computerStats'),
     content: document.querySelector('.content'),
     computerGridLayer: document.querySelector('.computerGridLayer'),
   });

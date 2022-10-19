@@ -158,12 +158,14 @@ describe('ui', () => {
     const result1 = ui.getMousePosition(294, 84);
 
     const position2 = position.createPosition(8, 2);
+    const outOfBounceResult = ui.getMousePosition(462, 462);
 
     const mediaMatch = matchMedia('(max-width: 470px)');
     ui.changeBlockSize(mediaMatch);
     const result2 = ui.getMousePosition(168, 42);
 
     const position3 = position.createPosition(1, 1);
+
     const mediaMatch2 = matchMedia('(max-width: 320px)');
     ui.changeBlockSize(mediaMatch2);
     const result3 = ui.getMousePosition(15.322, 18.423327);
@@ -173,5 +175,6 @@ describe('ui', () => {
     expect(result1).toEqual(position1);
     expect(result3).toEqual(position3);
     expect(result4).toEqual(false);
+    expect(outOfBounceResult).toEqual(false);
   });
 });

@@ -100,12 +100,32 @@ const Gameboard = () => {
 
     return shipsArray;
   };
+  const filterAttack = (array, currentAttack) => {
+    const currentAttackArray = array.filter(
+      (item) =>
+        item.xCoord === currentAttack.xCoord &&
+        item.yCoord === currentAttack.yCoord
+    );
+
+    return currentAttackArray;
+  };
+
+  const hasHitShip = (hitPosition, latestHits, latestMisses) => {
+    const hasBeenHit = filterAttack(latestHits, hitPosition);
+    const hasBeenMiss = filterAttack(latestMisses, hitPosition);
+
+    if (hasBeenHit.length > 0 || hasBeenMiss.length > 0) return true;
+    return false;
+  };
 
   const attackShip = (latestPosition, ships, currentHits, currentMisses) => {
     let isHit = false;
     const latestShipsArray = [];
     const latestHits = currentHits;
     const latestMisses = currentMisses;
+
+    if (!latestPosition) return false;
+    if (hasHitShip(latestPosition, currentHits, currentMisses)) return false;
 
     ships.forEach((shipArray) => {
       let positionsArray = practical.copyArray(shipArray);
@@ -132,6 +152,7 @@ const Gameboard = () => {
 
   const recieveAttack = (latestPosition) => {
     const result = attackShip(latestPosition, currentShips, hits, misses);
+    if (!result) return false;
 
     currentShips = result.latestShipsArray;
     hits = result.latestHits;
@@ -154,16 +175,6 @@ const Gameboard = () => {
     return randomPosition;
   };
 
-  const filterAttack = (array, currentAttack) => {
-    const currentAttackArray = array.filter(
-      (item) =>
-        item.xCoord === currentAttack.xCoord &&
-        item.yCoord === currentAttack.yCoord
-    );
-
-    return currentAttackArray;
-  };
-
   const getTypeOfPlacedShip = () => {
     if (currentShips.length === 5) return false;
 
@@ -180,13 +191,10 @@ const Gameboard = () => {
 
   const recieveRandomAttack = (randomizer) => {
     const randomPosition = createRandomCoords(randomizer);
+    const hasHit = hasHitShip(randomPosition, hits, misses);
 
-    const hasBeenHit = filterAttack(hits, randomPosition);
-    const hasBeenMiss = filterAttack(misses, randomPosition);
+    if (hasHit) return recieveRandomAttack(randomizer);
 
-    if (hasBeenHit.length > 0 || hasBeenMiss.length > 0) {
-      return recieveRandomAttack(randomizer);
-    }
     return recieveAttack(randomPosition);
   };
 

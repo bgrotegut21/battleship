@@ -27,7 +27,11 @@ const Ui = () => {
 
     const mousePosition = position.createPosition(xCoord, yCoord);
 
-    if (xCoord < 0 || yCoord < 0) return false;
+    const outOfBounce = position.checkOutOfBounce(mousePosition);
+
+    if (outOfBounce) return false;
+
+    // console.log(mousePosition, 'the current mouse position');
 
     return mousePosition;
   };
@@ -43,11 +47,13 @@ const Ui = () => {
   // wotk on this function
   const findTouchPosition = (event) => {
     const rect = event.target.getBoundingClientRect();
-    const touchOffsetX = event.targetTouches[0].pageX - rect.left;
-    const touchOffsetY = event.targetTouches[0].pageY - rect.top;
+    const touchOffsetX = event.targetTouches[0].clientX - rect.x;
+    const touchOffsetY = event.targetTouches[0].clientY - rect.y;
 
     const touchPosition = getMousePosition(touchOffsetX, touchOffsetY);
     mouseBlockLocation = touchPosition;
+
+    console.log(mouseBlockLocation, 'the mouse block location');
 
     event.preventDefault();
   };
@@ -211,14 +217,18 @@ const Ui = () => {
   };
 
   const checkMouseTarget = (elementClass) => {
-    console.log(elementClass, 'the element calss');
+    // console.log(elementClass, 'the element calss');
     if (elementClass !== 'gridOverlay computerGridOverlay') return false;
     return true;
   };
 
   const changeMousePosition = (event) => {
     const mouseTarget = checkMouseTarget(event.target.className);
-    if (!mouseTarget) mouseBlockLocation = mouseTarget;
+    if (!mouseTarget) mouseBlockLocation = false;
+  };
+
+  const attackShips = () => {
+    activeGame.attackBoats(mouseBlockLocation);
   };
 
   const addGameEvents = () => {
@@ -226,22 +236,33 @@ const Ui = () => {
     const element = dom.getElements();
     window.addEventListener('mousemove', changeMousePosition);
     element.computerGridLayer.addEventListener('mousemove', findMousePosition);
-    element.computerGridLayer.addEventListener('touchmove', findTouchPosition);
+    element.computerGridLayer.addEventListener('click', attackShips);
   };
 
-  const addShips = (
-    ships,
-    shipType,
-    grid,
-    latestBlockSize,
-    isMousePosition
-  ) => {
+  const renderShips = (ships, grid, latestBlockSize) => {
     ships.forEach((shipGroup) => {
       shipGroup.forEach((boat) => {
-        const shipElement = createShipBlock(boat, latestBlockSize, shipType);
+        const shipElement = createShipBlock(boat, latestBlockSize);
         grid.appendChild(shipElement);
       });
     });
+  };
+
+  const renderHits = (ships, shipType, grid, latestBlockSize) => {
+    ships.forEach((shipPosition) => {
+      const shipElement = createShipBlock(
+        shipPosition,
+        latestBlockSize,
+        shipType
+      );
+      grid.appendChild(shipElement);
+    });
+  };
+
+  const removeCursorElement = () => {
+    const { computerGrid } = dom.getElements();
+
+    console.log(computerGrid.innerHTML);
   };
 
   const renderGrids = (blockSize2, mousePosition) => {
@@ -258,18 +279,41 @@ const Ui = () => {
 
     // console.log(playerBoardValues, 'playerBoardValues');
     // console.log(computerBoardValues, 'computerBoardValues');
+    // console.log(playerBoardValues, 'the player board values');
 
-    addShips(playerBoardValues.currentShips, false, playerGrid, blockSize2);
-    addShips(playerBoardValues.hits, 'hitBlock', playerGrid, blockSize2);
-    addShips(playerBoardValues.misses, 'missBlock', playerGrid, blockSize);
+    renderShips(playerBoardValues.currentShips, playerGrid, blockSize2);
+    renderHits(playerBoardValues.hits, 'hitBlock', playerGrid, blockSize2);
+    renderHits(playerBoardValues.misses, 'missBlock', playerGrid, blockSize2);
 
-    addShips(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
-    addShips(computerBoardValues.misses, 'missBlock', computerGrid, blockSize2);
+    renderHits(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
+    renderHits(
+      computerBoardValues.misses,
+      'missBlock',
+      computerGrid,
+      blockSize2
+    );
 
     const mouseShip = ship.createShip(mousePosition, 1, 'x');
 
-    if (!mouseShip) computerGrid.innerHTML = '';
-    else addShips([mouseShip], 'cursorBlock', computerGrid, blockSize2);
+    if (mouseShip) {
+      renderHits(mouseShip, 'cursorBlock', computerGrid, blockSize2);
+    }
+  };
+
+  const renderStats = () => {
+    const gameValues = activeGame.getGameValues();
+
+    const { playerHits, playerMisses } = dom.getElements();
+    const { computerHits, computerMisses } = dom.getElements();
+
+    const playerBoardValues = gameValues.playerBoard.getValues();
+    const computerBoardValues = gameValues.computerBoard.getValues();
+
+    playerHits.textContent = `Hits - ${playerBoardValues.hits.length}`;
+    playerMisses.textContent = `Misses - ${playerBoardValues.misses.length}`;
+
+    computerHits.textContent = `Hits - ${computerBoardValues.hits.length}`;
+    computerMisses.textContent = `Misses - ${computerBoardValues.misses.length}`;
   };
 
   const renderGame = () => {
@@ -278,8 +322,10 @@ const Ui = () => {
 
       const latestBlockSize = changeBlockSize(window.matchMedia);
       renderGrids(latestBlockSize, mouseBlockLocation);
+      renderStats();
 
       if (!gameStatus.gameFinished) renderGame(latestBlockSize);
+      renderGame(latestBlockSize);
     }, renderSpeed);
   };
 

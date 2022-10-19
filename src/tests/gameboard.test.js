@@ -104,6 +104,19 @@ describe('gameboard', () => {
     });
 
     expect(
+      gameboard.attackShip(
+        shipPosition2,
+        [[], ship3, ship4],
+        [shipPosition2],
+        []
+      )
+    ).toEqual(false);
+
+    expect(
+      gameboard.attackShip(false, [[], ship3, ship4], [shipPosition2], [])
+    ).toEqual(false);
+
+    expect(
       gameboard.attackShip(shipPosition5, shipArray5, [], [shipPosition1])
     ).toEqual({
       isHit: false,
@@ -172,8 +185,8 @@ describe('gameboard', () => {
       index += 1;
     }
 
-    console.log(result, 'the current result');
-    console.log(expectedResult, 'the expected result');
+    // console.log(result, 'the current result');
+    // console.log(expectedResult, 'the expected result');
 
     expect(expectedResult).toEqual(result);
   });
