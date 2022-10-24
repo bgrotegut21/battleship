@@ -60,7 +60,11 @@ const Game = () => {
   };
 
   const arrangeBlocks = (mousePosition, currentRotation) => {
-    const shipTypeObject = playerCheckBoard.getTypeOfPlacedShip();
+    const checkboardObjects = playerCheckBoard.getValues();
+
+    const shipTypeObject = playerCheckBoard.getTypeOfPlacedShip(
+      checkboardObjects.currentShips
+    );
 
     // console.log(shipTypeObject, 'the ship type object');
     // console.log(mousePosition, 'the mouse position');

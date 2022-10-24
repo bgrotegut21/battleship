@@ -264,7 +264,7 @@ const Ui = () => {
 
     console.log(computerGrid.innerHTML);
   };
-
+  // WORK ON THIS AND FIX RANDOM LENGTH
   const renderGrids = (blockSize2, mousePosition) => {
     const gameValues = activeGame.getGameValues();
 
@@ -284,6 +284,8 @@ const Ui = () => {
     renderShips(playerBoardValues.currentShips, playerGrid, blockSize2);
     renderHits(playerBoardValues.hits, 'hitBlock', playerGrid, blockSize2);
     renderHits(playerBoardValues.misses, 'missBlock', playerGrid, blockSize2);
+
+    renderShips(computerBoardValues.currentShips, computerGrid, blockSize2);
 
     renderHits(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
     renderHits(

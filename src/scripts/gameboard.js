@@ -43,59 +43,64 @@ const Gameboard = () => {
     return shipsDoCollide;
   };
 
+  const getTypeOfPlacedShip = (shipArray) => {
+    if (shipArray.length === 5) return false;
+
+    const shipTypes = [
+      { shipType: 'carrier', shipLength: 5 },
+      { shipType: 'battleship', shipLength: 4 },
+      { shipType: 'destoyer', shipLength: 3 },
+      { shipType: 'submarine', shipLength: 3 },
+      { shipType: 'gunboat', shipLength: 2 },
+    ];
+
+    return shipTypes[shipArray.length];
+  };
+
   const playerPlaceShip = (location, axis) => {
     const currentArray = practical.copyArray(currentShips);
 
-    let shiplength = 5 - currentArray.length;
+    const shipType = getTypeOfPlacedShip(currentArray);
 
-    if (shiplength === 2) shiplength = 3;
-    if (shiplength === 1) shiplength = 2;
-
-    const currentShip = ship.createShip(location, shiplength, axis);
+    const currentShip = ship.createShip(location, shipType.shipLength, axis);
 
     const isCollided = compareShipsArray(currentArray, currentShip);
 
-    if (currentArray.length === 5 || !currentShip || isCollided) {
-      return currentArray;
+    if (currentArray.length < 5 || currentShip || !isCollided) {
+      currentArray.push(currentShip);
     }
 
-    currentArray.push(currentShip);
     currentShips = currentArray;
     return currentArray;
   };
 
-  const placeRandomShips = (length, shipsArray, randomizer, randomAxies) => {
+  const placeRandomShips = (shipsArray, randomizer, randomAxies) => {
     const latestShipsArray = shipsArray;
-    let latestLength = length;
     const randomPosition = position.createPosition(randomizer(), randomizer());
+    const shipType = getTypeOfPlacedShip(latestShipsArray);
+    if (!shipType) {
+      console.log(shipType);
+      console.log(latestShipsArray, 'the latest ships array');
+
+      return latestShipsArray;
+    }
+
+    const latestLength = shipType.shipLength;
+
     const randomShip = ship.createShip(
       randomPosition,
       latestLength,
       randomAxies()
     );
 
-    if (randomShip) {
-      const shipCollides = compareShipsArray(latestShipsArray, randomShip);
-      if (!shipCollides) {
-        if (latestLength > 2) latestLength -= 1;
-        if (shipsArray.length < 5) latestShipsArray.push(randomShip);
+    const shipCollides = compareShipsArray(latestShipsArray, randomShip);
+    if (randomShip && !shipCollides) latestShipsArray.push(randomShip);
 
-        if (shipsArray.length === 5) {
-          return latestShipsArray;
-        }
-      }
-    }
-
-    return placeRandomShips(
-      latestLength,
-      latestShipsArray,
-      randomizer,
-      randomAxies
-    );
+    return placeRandomShips(latestShipsArray, randomizer, randomAxies);
   };
 
   const placeShipsRandomly = (randomizer, randomAxies) => {
-    const shipsArray = placeRandomShips(5, [], randomizer, randomAxies);
+    const shipsArray = placeRandomShips([], randomizer, randomAxies);
     currentShips = shipsArray;
 
     return shipsArray;
@@ -173,20 +178,6 @@ const Gameboard = () => {
     }
 
     return randomPosition;
-  };
-
-  const getTypeOfPlacedShip = () => {
-    if (currentShips.length === 5) return false;
-
-    const shipTypes = [
-      { shipType: 'carrier', shipLength: 5 },
-      { shipType: 'battleship', shipLength: 4 },
-      { shipType: 'destoyer', shipLength: 3 },
-      { shipType: 'submarine', shipLength: 3 },
-      { shipType: 'gunboat', shipLength: 2 },
-    ];
-
-    return shipTypes[currentShips.length];
   };
 
   const recieveRandomAttack = (randomizer) => {

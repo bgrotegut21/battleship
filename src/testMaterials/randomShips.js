@@ -22,7 +22,7 @@ const randomMaterial = () => {
   const randomShip1 = ship.createShip(randomShipPosition1, 5, 'y');
   const randomShip2 = ship.createShip(randomShipPosition2, 4, 'x');
   const randomShip3 = ship.createShip(randomShipPosition3, 3, 'y');
-  const randomShip4 = ship.createShip(randomShipPosition4, 2, 'x');
+  const randomShip4 = ship.createShip(randomShipPosition4, 3, 'x');
   const randomShip5 = ship.createShip(randomShipPosition6, 2, 'x');
 
   const randomShip6 = ship.createShip(randomShipPosition6, 1, 'x');
