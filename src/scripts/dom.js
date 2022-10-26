@@ -19,6 +19,9 @@ const Dom = () => {
     computerMisses: document.querySelector('.computerMisses'),
     content: document.querySelector('.content'),
     computerGridLayer: document.querySelector('.computerGridLayer'),
+    restart: document.querySelector('.restart'),
+    gameOverText: document.querySelector('.gameOverText'),
+    gameFinishedSection: document.querySelector('.gameFinishedSection'),
   });
 
   const getPage = () => {
@@ -26,6 +29,13 @@ const Dom = () => {
                             <div class="overlay"></div>
                             <div class="sectionScreen">
                               <div class="shipSelection">
+
+                              <div class="gameFinishedSection">
+                              <h1 class="gameOverText">You Win 😃</h1>
+                    
+                              <button class="restart">Restart</button>
+                            </div>
+
                                 <h1 class="shipTitle">BATTLESHIP</h1>
                                 <h2 class="shipText">Place your Battleship</h2>
                                 <div class="shipLayer">

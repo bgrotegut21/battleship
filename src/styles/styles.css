@@ -131,6 +131,30 @@ body {
   align-items: center;
 }
 
+.gameFinishedSection {
+  width: 250px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  font-size: medium;
+
+  background: var(--darkBlack);
+
+  color: white;
+}
+
+.restart {
+  width: 100px;
+  height: 30px;
+  background: var(--darkGray);
+  margin-top: 12px;
+
+  border: 1px solid white;
+  color: white;
+}
+
 .shipTitle {
   font-family: 'Azeret Mono', monospace;
 }
@@ -154,7 +178,8 @@ body {
     brightness(100%);
 }
 
-.rotateButton:hover {
+.rotateButton:hover,
+.restart:hover {
   background: var(--darkBlack);
   cursor: pointer;
 }

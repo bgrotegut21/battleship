@@ -258,13 +258,13 @@ describe('gameboard', () => {
       expect(recieved).toEqual(result);
     };
 
-    // assertPlayerPlaceShip(position.createPosition(1, 1), 'y', [
-    //   ship.createShip(position.createPosition(1, 1), 5, 'y'),
-    // ]);
+    assertPlayerPlaceShip(position.createPosition(1, 1), 'y', [
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+    ]);
 
-    // assertPlayerPlaceShip(position.createPosition(9, 9), 'x', [
-    //   ship.createShip(position.createPosition(1, 1), 5, 'y'),
-    // ]);
+    assertPlayerPlaceShip(position.createPosition(9, 9), 'x', [
+      ship.createShip(position.createPosition(1, 1), 5, 'y'),
+    ]);
 
     assertPlayerPlaceShip(position.createPosition(4, 4), 'x', [
       ship.createShip(position.createPosition(1, 1), 5, 'y'),

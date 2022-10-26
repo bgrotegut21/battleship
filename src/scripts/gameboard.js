@@ -62,12 +62,12 @@ const Gameboard = () => {
 
     const shipType = getTypeOfPlacedShip(currentArray);
 
-    const currentShip = ship.createShip(location, shipType.shipLength, axis);
+    const latestShip = ship.createShip(location, shipType.shipLength, axis);
 
-    const isCollided = compareShipsArray(currentArray, currentShip);
+    const isCollided = compareShipsArray(currentArray, latestShip);
 
-    if (currentArray.length < 5 || currentShip || !isCollided) {
-      currentArray.push(currentShip);
+    if (shipType && latestShip && !isCollided) {
+      currentArray.push(latestShip);
     }
 
     currentShips = currentArray;
@@ -79,8 +79,8 @@ const Gameboard = () => {
     const randomPosition = position.createPosition(randomizer(), randomizer());
     const shipType = getTypeOfPlacedShip(latestShipsArray);
     if (!shipType) {
-      console.log(shipType);
-      console.log(latestShipsArray, 'the latest ships array');
+      // console.log(shipType);
+      // console.log(latestShipsArray, 'the latest ships array');
 
       return latestShipsArray;
     }

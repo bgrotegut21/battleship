@@ -1,7 +1,10 @@
 import Dom from './dom.js';
 import Position from './position.js';
 import Ship from './ship.js';
-import { activeGame } from './main.js';
+import Game from './main.js';
+// you win  😃
+
+// you lost 😢
 
 const Ui = () => {
   const dom = Dom();
@@ -11,6 +14,8 @@ const Ui = () => {
   const renderSpeed = 1;
 
   let blockSize = 42;
+
+  let activeGame;
 
   let placedShip = false;
   let axis = 'y';
@@ -197,6 +202,19 @@ const Ui = () => {
     placePlayerShip(placedShip, axis, activeGame);
   };
 
+  const resetGame = () => {
+    const element = dom.getElements();
+
+    element.computerGrid.innerHTML = '';
+    element.playerGrid.innerHTML = '';
+
+    element.shipSelection.style.display = 'flex';
+    element.gameFinishedSection.style.display = 'none';
+    element.gameOverText.innerHTML = '';
+
+    activateUi();
+  };
+
   const addUiEvents = () => {
     const element = dom.getElements();
     element.shipLayer.addEventListener('mousemove', findMousePosition);
@@ -216,6 +234,37 @@ const Ui = () => {
     element.rotateButton.removeEventListener('click', changeAxis);
   };
 
+  const addEndingEvents = () => {
+    const element = dom.getElements();
+    element.restart.addEventListener('click', restart);
+  };
+
+  const removeEndingEvents = () => {
+    const element = dom.getElements();
+    element.restart.removeEventListener('click', element.restart);
+  };
+
+  const removeGameEvents = () => {
+    addEndingEvents();
+
+    const element = dom.getElements();
+    window.removeEventListener('mousemove', changeMousePosition);
+    element
+      .removeEventListener('touchmove', change)
+      .addEventListener('mousemove', findMousePosition);
+    element.removeEventListener('click', attackShips);
+  };
+
+  const getMessage = () => {};
+
+  const addGameEvents = () => {
+    removeUiEvents();
+    const element = dom.getElements();
+    window.addEventListener('mousemove', changeMousePosition);
+    element.computerGridLayer.addEventListener('mousemove', findMousePosition);
+    element.computerGridLayer.addEventListener('click', attackShips);
+  };
+
   const checkMouseTarget = (elementClass) => {
     // console.log(elementClass, 'the element calss');
     if (elementClass !== 'gridOverlay computerGridOverlay') return false;
@@ -229,14 +278,6 @@ const Ui = () => {
 
   const attackShips = () => {
     activeGame.attackBoats(mouseBlockLocation);
-  };
-
-  const addGameEvents = () => {
-    removeUiEvents();
-    const element = dom.getElements();
-    window.addEventListener('mousemove', changeMousePosition);
-    element.computerGridLayer.addEventListener('mousemove', findMousePosition);
-    element.computerGridLayer.addEventListener('click', attackShips);
   };
 
   const renderShips = (ships, grid, latestBlockSize) => {
@@ -264,7 +305,6 @@ const Ui = () => {
 
     console.log(computerGrid.innerHTML);
   };
-  // WORK ON THIS AND FIX RANDOM LENGTH
   const renderGrids = (blockSize2, mousePosition) => {
     const gameValues = activeGame.getGameValues();
 
@@ -327,7 +367,7 @@ const Ui = () => {
       renderStats();
 
       if (!gameStatus.gameFinished) renderGame(latestBlockSize);
-      renderGame(latestBlockSize);
+      else renderGame();
     }, renderSpeed);
   };
 
@@ -390,8 +430,9 @@ const Ui = () => {
   const activateUi = () => {
     const pageContent = dom.getPage();
     document.body.innerHTML = pageContent;
-
+    activeGame = Game();
     addUiEvents();
+    removeEndingEvents();
     renderSelectionGrid();
   };
 
