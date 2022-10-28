@@ -1,4 +1,4 @@
-import { Game } from '../scripts/main.js';
+import Game from '../scripts/main.js';
 import randomMaterial from '../testMaterials/randomShips.js';
 import Position from '../scripts/position.js';
 import Practical from '../scripts/practical.js';
@@ -101,12 +101,12 @@ describe('main', () => {
 
     expect(game.gameIsOver()).toEqual({ gameFinished: false });
     expect(game2.gameIsOver()).toEqual({
-      message: 'You Lost',
+      message: 'You Lost 😢',
       gameFinished: true,
     });
 
     expect(game3.gameIsOver()).toEqual({
-      message: 'You Won',
+      message: 'You Won 😃',
       gameFinished: true,
     });
   });

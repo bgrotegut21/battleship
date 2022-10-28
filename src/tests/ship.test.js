@@ -1,8 +1,6 @@
 import Position from '../scripts/position.js';
 import Ship from '../scripts/ship.js';
 
-// change all positionsClass to position
-
 const position = Position();
 const ship = Ship();
 

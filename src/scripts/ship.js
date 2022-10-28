@@ -44,8 +44,6 @@ const Ship = () => {
     return populateShips(position1, length1, [], false);
   };
 
-
-
   const isSunk = (shipArray) => {
     if (shipArray.length === 0) return true;
     return false;

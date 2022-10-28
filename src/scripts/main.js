@@ -50,11 +50,11 @@ const Game = () => {
     if (!checkSetup(playerCheckShips)) return false;
 
     if (computerBoard.isAllSunk()) {
-      return { message: 'You Won', gameFinished: true };
+      return { message: 'You Won 😃', gameFinished: true };
     }
 
     if (playerBoard.isAllSunk()) {
-      return { message: 'You Lost', gameFinished: true };
+      return { message: 'You Lost 😢', gameFinished: true };
     }
     return { gameFinished: false };
   };
@@ -66,17 +66,11 @@ const Game = () => {
       checkboardObjects.currentShips
     );
 
-    // console.log(shipTypeObject, 'the ship type object');
-    // console.log(mousePosition, 'the mouse position');
-    // console.log(currentRotation, 'the current rotation');
-
     const currentShip = ship.createShip(
       mousePosition,
       shipTypeObject.shipLength,
       currentRotation
     );
-    // console.log(currentShip, 'the most up to date ships');
-
     return currentShip;
   };
 
@@ -97,6 +91,4 @@ const Game = () => {
   };
 };
 
-const activeGame = Game();
-
-export { Game, activeGame };
+export default Game;

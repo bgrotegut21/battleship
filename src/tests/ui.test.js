@@ -31,8 +31,6 @@ describe('ui', () => {
     medias.forEach((media) => {
       const mediaMatch = matchMedia(media);
 
-      // console.log(mediaMatch, 'the current media match');
-
       ui.changeBlockSize(mediaMatch);
       const uiValues = ui.getValues();
 

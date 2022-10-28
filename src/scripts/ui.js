@@ -2,9 +2,6 @@ import Dom from './dom.js';
 import Position from './position.js';
 import Ship from './ship.js';
 import Game from './main.js';
-// you win  😃
-
-// you lost 😢
 
 const Ui = () => {
   const dom = Dom();
@@ -14,19 +11,14 @@ const Ui = () => {
   const renderSpeed = 1;
 
   let blockSize = 42;
-
-  let activeGame;
-
+  let activeGame = Game();
   let placedShip = false;
   let axis = 'y';
-
   let mouseBlockLocation = false;
 
   const createDomElement = (elementName) => document.createElement(elementName);
 
   const getMousePosition = (offsetX, offsetY) => {
-    // console.log(offsetX, offsetY, 'offset x and offset y');
-
     const xCoord = Math.floor(offsetX / blockSize);
     const yCoord = Math.floor(offsetY / blockSize);
 
@@ -36,8 +28,6 @@ const Ui = () => {
 
     if (outOfBounce) return false;
 
-    // console.log(mousePosition, 'the current mouse position');
-
     return mousePosition;
   };
 
@@ -45,11 +35,8 @@ const Ui = () => {
     const currentMousePosition = getMousePosition(event.offsetX, event.offsetY);
 
     mouseBlockLocation = currentMousePosition;
-
-    // console.log(currentMousePosition, 'the current mouse position');
   };
 
-  // wotk on this function
   const findTouchPosition = (event) => {
     const rect = event.target.getBoundingClientRect();
     const touchOffsetX = event.targetTouches[0].clientX - rect.x;
@@ -57,21 +44,15 @@ const Ui = () => {
 
     const touchPosition = getMousePosition(touchOffsetX, touchOffsetY);
     mouseBlockLocation = touchPosition;
-
-    console.log(mouseBlockLocation, 'the mouse block location');
-
     event.preventDefault();
   };
 
-  // block size matches the size gridsize of the media query divided by 10
   const changeBlockSize = (matchMedia) => {
     blockSize = 42;
     if (matchMedia('(max-width: 960px)').matches) blockSize = 30;
     if (matchMedia('(max-width: 470px)').matches) blockSize = 21;
     if (matchMedia('(max-width: 320px)').matches) blockSize = 15;
     return blockSize;
-
-    // console.log(matchMedia('(max-width: 320px)'), 'the current match media');
   };
 
   const createBlockElement = (blockClass, createBlock) => {
@@ -93,24 +74,6 @@ const Ui = () => {
   };
 
   const disableStarterUi = () => true;
-
-  // const renderSelectionBlocks = (mousePosition, latestBlockSize) => {
-  //   const element = dom.getElements();
-
-  //   const currentSnakeBlock = createBlockElement();
-  //   const realPositionX = Math.floor(mousePosition.xCoord * latestBlockSize);
-  //   const realPositionY = Math.floor(mousePosition.yCoord * latestBlockSize);
-
-  //   console.log(mousePosition, 'THE CURRENT MOUSE POSITION');
-
-  //   console.log(realPositionX, 'the real position x');
-  //   console.log(realPositionY, 'the real position y');
-
-  //   currentSnakeBlock.style.left = `${realPositionX}px`;
-  //   currentSnakeBlock.style.top = `${realPositionY}px`;
-
-  //   element.shipGrid.appendChild(currentSnakeBlock);
-  // };
 
   const createShipBlock = (shipPosition, latestBlockSize, shipType) => {
     const shipBlock = createBlockElement(shipType, createDomElement);
@@ -208,11 +171,12 @@ const Ui = () => {
     element.computerGrid.innerHTML = '';
     element.playerGrid.innerHTML = '';
 
+    element.sectionScreen.style.display = 'flex';
     element.shipSelection.style.display = 'flex';
     element.gameFinishedSection.style.display = 'none';
     element.gameOverText.innerHTML = '';
 
-    activateUi();
+    restartGame();
   };
 
   const addUiEvents = () => {
@@ -236,7 +200,7 @@ const Ui = () => {
 
   const addEndingEvents = () => {
     const element = dom.getElements();
-    element.restart.addEventListener('click', restart);
+    element.restart.addEventListener('click', resetGame);
   };
 
   const removeEndingEvents = () => {
@@ -246,16 +210,15 @@ const Ui = () => {
 
   const removeGameEvents = () => {
     addEndingEvents();
-
     const element = dom.getElements();
-    window.removeEventListener('mousemove', changeMousePosition);
-    element
-      .removeEventListener('touchmove', change)
-      .addEventListener('mousemove', findMousePosition);
-    element.removeEventListener('click', attackShips);
-  };
 
-  const getMessage = () => {};
+    window.removeEventListener('mousemove', changeMousePosition);
+    element.computerGridLayer.removeEventListener(
+      'mousemove',
+      findMousePosition
+    );
+    element.computerGridLayer.removeEventListener('click', attackShips);
+  };
 
   const addGameEvents = () => {
     removeUiEvents();
@@ -266,7 +229,6 @@ const Ui = () => {
   };
 
   const checkMouseTarget = (elementClass) => {
-    // console.log(elementClass, 'the element calss');
     if (elementClass !== 'gridOverlay computerGridOverlay') return false;
     return true;
   };
@@ -300,11 +262,6 @@ const Ui = () => {
     });
   };
 
-  const removeCursorElement = () => {
-    const { computerGrid } = dom.getElements();
-
-    console.log(computerGrid.innerHTML);
-  };
   const renderGrids = (blockSize2, mousePosition) => {
     const gameValues = activeGame.getGameValues();
 
@@ -316,16 +273,9 @@ const Ui = () => {
 
     const playerBoardValues = gameValues.playerBoard.getValues();
     const computerBoardValues = gameValues.computerBoard.getValues();
-
-    // console.log(playerBoardValues, 'playerBoardValues');
-    // console.log(computerBoardValues, 'computerBoardValues');
-    // console.log(playerBoardValues, 'the player board values');
-
     renderShips(playerBoardValues.currentShips, playerGrid, blockSize2);
     renderHits(playerBoardValues.hits, 'hitBlock', playerGrid, blockSize2);
     renderHits(playerBoardValues.misses, 'missBlock', playerGrid, blockSize2);
-
-    renderShips(computerBoardValues.currentShips, computerGrid, blockSize2);
 
     renderHits(computerBoardValues.hits, 'hitBlock', computerGrid, blockSize2);
     renderHits(
@@ -358,6 +308,23 @@ const Ui = () => {
     computerMisses.textContent = `Misses - ${computerBoardValues.misses.length}`;
   };
 
+  const displayGameOverUi = (status) => {
+    const elements = dom.getElements();
+
+    elements.computerGrid.innerHTML = '';
+    elements.playerGrid.innerHTML = '';
+
+    removeGameEvents();
+    addEndingEvents();
+    elements.gameOverText.innerHTML = status.message;
+
+    elements.shipSelection.style.display = 'none';
+    elements.sectionScreen.style.display = 'flex';
+    elements.gameFinishedSection.style.display = 'flex';
+
+    elements.overlay.style.display = 'block';
+  };
+
   const renderGame = () => {
     setTimeout(() => {
       const gameStatus = activeGame.gameIsOver();
@@ -367,7 +334,7 @@ const Ui = () => {
       renderStats();
 
       if (!gameStatus.gameFinished) renderGame(latestBlockSize);
-      else renderGame();
+      else displayGameOverUi(gameStatus);
     }, renderSpeed);
   };
 
@@ -410,8 +377,6 @@ const Ui = () => {
 
         if (currentShip) placedShip = currentShip;
 
-        // console.log(placedShip, 'the current placed ship');
-
         if (placedShip) renderPlacedShip(blockSize);
       }
 
@@ -427,13 +392,24 @@ const Ui = () => {
     mouseBlockLocation,
   });
 
+  const restartGame = () => {
+    removeEndingEvents();
+
+    renderSelectionGrid();
+
+    blockSize = 42;
+    activeGame = Game();
+    placedShip = false;
+    axis = 'y';
+    mouseBlockLocation = false;
+
+    addUiEvents();
+  };
+
   const activateUi = () => {
     const pageContent = dom.getPage();
     document.body.innerHTML = pageContent;
-    activeGame = Game();
-    addUiEvents();
-    removeEndingEvents();
-    renderSelectionGrid();
+    restartGame();
   };
 
   return {

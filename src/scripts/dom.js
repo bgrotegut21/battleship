@@ -16,6 +16,7 @@ const Dom = () => {
     playerMisses: document.querySelector('.playerMisses'),
     computerGrid: document.querySelector('.computerGrid'),
     computerHits: document.querySelector('.computerHits'),
+    shipSelection: document.querySelector('.shipSelection'),
     computerMisses: document.querySelector('.computerMisses'),
     content: document.querySelector('.content'),
     computerGridLayer: document.querySelector('.computerGridLayer'),
@@ -28,16 +29,18 @@ const Dom = () => {
     const content = `    <div class="content">
                             <div class="overlay"></div>
                             <div class="sectionScreen">
+                            <div class="gameFinishedSection">
+                            <h1 class="gameOverText">You Win 😃</h1>
+                  
+                            <button class="restart">Restart</button>
+                          </div>
+
                               <div class="shipSelection">
 
-                              <div class="gameFinishedSection">
-                              <h1 class="gameOverText">You Win 😃</h1>
-                    
-                              <button class="restart">Restart</button>
-                            </div>
+
 
                                 <h1 class="shipTitle">BATTLESHIP</h1>
-                                <h2 class="shipText">Place your Battleship</h2>
+                                <h2 class="shipText">Place your ship</h2>
                                 <div class="shipLayer">
                                   <div class="shipOverlay"></div>
                                   <div class="shipGrid"></div>

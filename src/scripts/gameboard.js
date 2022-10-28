@@ -27,9 +27,6 @@ const Gameboard = () => {
     let shipsDoCollide = false;
     if (!ships) return shipsDoCollide;
 
-    // console.log(latestShipsArray, 'the curreent ships array');
-    // console.log(ships, 'the current ships');
-
     latestShipsArray.forEach((latestShips) => {
       latestShips.forEach((boat) => {
         ships.forEach((latestBoat) => {
@@ -78,12 +75,7 @@ const Gameboard = () => {
     const latestShipsArray = shipsArray;
     const randomPosition = position.createPosition(randomizer(), randomizer());
     const shipType = getTypeOfPlacedShip(latestShipsArray);
-    if (!shipType) {
-      // console.log(shipType);
-      // console.log(latestShipsArray, 'the latest ships array');
-
-      return latestShipsArray;
-    }
+    if (!shipType) return latestShipsArray;
 
     const latestLength = shipType.shipLength;
 

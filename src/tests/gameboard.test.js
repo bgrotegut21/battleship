@@ -12,52 +12,11 @@ function* randomPositions(array) {
   }
 }
 
-// imported modules
 const gameboard = Gameboard();
 const ship = Ship();
 const position = Position();
 const randomItem = randomMaterial();
-// randomHit Positions
 
-// random array and positions
-
-// const randomLettersPosition = ['y', 'x', 'y', 'x', 'x'];
-
-// const numberPositions = [1, 1, 4, 4, 9, 6, 5, 7, 4, 1];
-
-// const randomShipPosition1 = position.createPosition(1, 1);
-// const randomShipPosition2 = position.createPosition(4, 4);
-// const randomShipPosition3 = position.createPosition(9, 6);
-// const randomShipPosition4 = position.createPosition(5, 7);
-// const randomShipPosition6 = position.createPosition(4, 1);
-// const randomShipPosition7 = position.createPosition(5, 1);
-
-// const randomShip1 = ship.createShip(randomShipPosition1, 5, 'y');
-// const randomShip2 = ship.createShip(randomShipPosition2, 4, 'x');
-// const randomShip3 = ship.createShip(randomShipPosition3, 3, 'y');
-// const randomShip4 = ship.createShip(randomShipPosition4, 2, 'x');
-// const randomShip5 = ship.createShip(randomShipPosition6, 2, 'x');
-
-// const randomShip6 = ship.createShip(randomShipPosition6, 1, 'x');
-// const randomShip7 = ship.createShip(randomShipPosition7, 1, 'x');
-
-// const randomShipsArray = [
-//   randomShip1,
-//   randomShip2,
-//   randomShip3,
-//   randomShip4,
-//   randomShip5,
-// ];
-
-// const randomShipsArray2 = [
-//   randomShip1,
-//   randomShip2,
-//   randomShip3,
-//   randomShip4,
-//   randomShip6,
-// ];
-
-// ship and hit positions
 const shipPosition1 = position.createPosition(1, 1);
 const shipPosition2 = position.createPosition(0, 0);
 const shipPosition3 = position.createPosition(5, 1);
@@ -65,18 +24,10 @@ const shipPosition4 = position.createPosition(2, 2);
 const shipPosition5 = position.createPosition(2, 1);
 
 const shipPosition8 = position.createPosition(4, 4);
-const shipPosition9 = position.createPosition(9, 6);
-const shipPosition10 = position.createPosition(8, 1);
 
-const ship1 = ship.createShip(shipPosition1, 3, 'x');
 const ship2 = ship.createShip(shipPosition2, 1, 'x');
 const ship3 = ship.createShip(shipPosition3, 3, 'x');
 const ship4 = ship.createShip(shipPosition4, 2, 'y');
-const ship5 = ship.createShip(shipPosition5, 3, 'y');
-
-const shipArray1 = [ship1];
-const shipArray3 = [ship2];
-const shipArray4 = [ship2, ship3];
 const shipArray5 = [ship2, ship3, ship4];
 
 const hitPosition1 = position.createPosition(6, 1);
@@ -84,15 +35,6 @@ const hitPosition2 = position.createPosition(7, 1);
 
 const shipArrayHit5Before = [[], ship3, ship4];
 const shipArrayHit5 = [[], [hitPosition1, hitPosition2], ship4];
-const shipArray6 = [ship4];
-
-const emptyArrays = [[], []];
-
-// 1,1 hit
-// 0,0 miss
-// 4,1 hit
-
-// random hit positions
 
 describe('gameboard', () => {
   it('attackShip', () => {
@@ -149,10 +91,6 @@ describe('gameboard', () => {
     expect(testBoard2.isAllSunk()).toBe(true);
   });
 
-  // 1,1 hit
-  // 0,0 miss
-  // 4,4 hit
-
   it('recieveRandomAttack', () => {
     const randomHitPositions = [
       shipPosition1,
@@ -179,14 +117,10 @@ describe('gameboard', () => {
       latestMisses: [randomHitPositions[2]],
     };
 
-    // the loops only iterates twice because the function will run the result recursively
     while (index < randomHitPositions.length - 2) {
       expectedResult = randomBoard.recieveRandomAttack(randomize);
       index += 1;
     }
-
-    // console.log(result, 'the current result');
-    // console.log(expectedResult, 'the expected result');
 
     expect(expectedResult).toEqual(result);
   });
@@ -248,7 +182,6 @@ describe('gameboard', () => {
     expect(randomShipPlacement).toEqual(randomItem.randomShipsArray);
   });
 
-  // WORK ON THIS
   it('playerPlaceShip', () => {
     const playerBoard = Gameboard();
 
@@ -305,8 +238,6 @@ describe('gameboard', () => {
       ship.createShip(position.createPosition(5, 7), 2, 'x'),
     ]);
   });
-
-  // getting type of ship should only be used when the game is placing the ships
 
   test('get type of ship', () => {
     const placeShipBoard = Gameboard();

@@ -39,9 +39,6 @@ const Practical = () => {
     if (!objectIsEqual) return false;
     if (objectKeys.length !== objectKeys2.length) return false;
 
-    // console.log(currentObject, 'the current object');
-    // console.log(currentObject2, 'the current object2');
-
     currentObjectValues.forEach((item) => {
       const item2 = currentObject2Values[secondIndex];
 
